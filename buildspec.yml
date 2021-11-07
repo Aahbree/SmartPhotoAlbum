@@ -13,13 +13,9 @@ phases:
       - zip -r9 ../deployment_package_1.zip .
       - zip -r9 ../deployment_package_2.zip .
       - cd ..
-      - mv LF2.py lambda_function.py
       - zip -g deployment_package_1.zip lambda_function.py
-      - mv lambda_function.py LF2.py
-      - mv LF1.py lambda_function.py
       - zip -g deployment_package_2.zip lambda_function.py
-      - mv lambda_function.py LF1.py
-
+      
   post_build:
     commands:
       - echo "Updating lambda Functions..."
