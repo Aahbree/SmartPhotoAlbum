@@ -3,14 +3,12 @@ phases:
   install:
     runtime-versions:
       python: 3.9
-    commands:
-      - echo "Installing dependencies..."
-      - pip install -r requirements.txt -t lib
   build:
     commands:
-      - echo "Zipping deployment package..."
-           
-  post_build:
-    commands:
-      - echo "Updating lambda Functions..."
-      
+      - sam build
+      - export BUCKET=divswa
+      - sam package --s3-bucket $BUCKET --output-template-file outputtemplate.yml
+artifacts:
+  files:
+    - template.yml
+    - outputtemplate.yml
