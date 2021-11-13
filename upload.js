@@ -10,6 +10,7 @@ function searchPhoto() {
   if(image_message == "")
     var image_message = document.getElementById("transcript").value;
 
+  console.log("Testing");
   console.log(image_message);
 
   var body = {};
