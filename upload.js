@@ -11,6 +11,7 @@ function searchPhoto() {
     var image_message = document.getElementById("transcript").value;
 
   console.log("Testing");
+  console.log("Testing again");	
   console.log(image_message);
 
   var body = {};
