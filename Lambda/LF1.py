@@ -60,6 +60,7 @@ def detectRekognitionLabel(bucket,name):
 def lambda_handler(event, context):
     # TODO implement
     print("Hello Swathi")
+    print("No way")
     print(event["Records"][0])
     bucket = event["Records"][0]["s3"]["bucket"]["name"]
     name = event["Records"][0]["s3"]["object"]["key"]
