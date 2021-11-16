@@ -1,3 +1,69 @@
+var name = '';
+var encoded = null;
+var fileExt = null;
+window.SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
+const synth = window.speechSynthesis;
+const recognition = new SpeechRecognition();
+const icon = document.querySelector('i.fa.fa-microphone')
+
+function searchFromVoice() {
+  console.log("i am here 1")
+  recognition.start();
+  console.log("i am here 2")
+  recognition.onresult = (event) => {
+    const speechToText = event.results[0][0].transcript;
+    console.log(speechToText)
+    console.log("i am here 3")
+
+    var apigClient = apigClientFactory.newClient({
+    apiKey: 'zsQWew9kiv4BnxIzs48uX6037wOow0eo8WKgsco2'
+  });
+
+  var body = {};
+  var params = {
+    q: speechToText,
+    'x-api-key': 'zsQWew9kiv4BnxIzs48uX6037wOow0eo8WKgsco2',
+	'Access-Control-Allow-Origin': '*',
+  };
+  var additionalParams = {
+    headers: {
+      'Content-Type': "application/json",
+    },
+  };
+
+  apigClient.searchGet(params, body, additionalParams)
+    .then(function (result) {
+      //This is where you would put a success callback
+      response_data = result.data
+      //var img1 = result.data.body;
+	  console.log(response_data);
+      length_of_response = response_data.length;
+      if (length_of_response == 0) {
+        document.getElementById("displaytext").innerHTML = "No Images Found !!!"
+        document.getElementById("displaytext").style.display = "block";
+      }
+
+      response_data.forEach(function (obj) {
+        var img = new Image();
+        // img.src = "https://photosforsearch1.s3.amazonaws.com/"+obj;
+        img.src = obj;
+        img.setAttribute("class", "banner-img");
+        img.setAttribute("alt", "effy");
+        img.setAttribute("width", "150");
+        img.setAttribute("height", "100");
+        document.getElementById("displaytext").innerHTML = "Images returned are : "
+        document.getElementById("img-container").appendChild(img);
+        document.getElementById("displaytext").style.display = "block";
+
+      });
+    }).catch(function (result) {
+      //This is where you would put an error callback
+    });
+    // console.log(speechToText);
+  }//
+}
+
+
 document.getElementById("displaytext").style.display = "none";
 
 function searchPhoto() {
@@ -6,12 +72,7 @@ function searchPhoto() {
     apiKey: 'zsQWew9kiv4BnxIzs48uX6037wOow0eo8WKgsco2'
   });
 
-  var image_message = document.getElementById("note-textarea").value;
-  if(image_message == "")
-    var image_message = document.getElementById("transcript").value;
-
-  console.log("Testing");
-  console.log("Testing again");	
+  var image_message = document.getElementById("note-textarea").value; 
   console.log(image_message);
 
   var body = {};
@@ -91,6 +152,7 @@ function uploadPhoto() {
   }
   console.log(file)
   console.log(custom_labels.value);
+  var cl= custom_labels.value;
   var file_data;
   // var file = document.querySelector('#file_path > input[type="file"]').files[0];
   var encoded_image = getBase64(file).then(
@@ -114,7 +176,7 @@ function uploadPhoto() {
         "bucket": "putphotos",
         'x-api-key': 'AUOuNErBtJ3wsgBmv9L889kByOl5vsux8o4Ng5cM',
 		"Content-Type" : "image/jpeg",
-		"x-amz-meta-customLabels":customLabels
+		'x-amz-meta-customLabels': cl
       };
 
       var additionalParams = {
